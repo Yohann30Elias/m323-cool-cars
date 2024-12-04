@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import CarForm from "@/app/carform/page";
+import './page.css';
 import Link from "next/link";
 
 export default function Home() {
@@ -92,7 +92,8 @@ export default function Home() {
 
   return (
     <div className="App">
-      <h1>My Frontend - The very beginning</h1>
+      <h1>Cool Cars List</h1>
+      <h2>try the filters!</h2>
       <button onClick={buttonHandler}>load cars</button>
       <br/>
       <input
