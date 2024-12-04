@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
+import CarForm from "./carform/page";
 import './page.css';
-import Link from "next/link";
 
 export default function Home() {
   const [cars, setCars] = useState([]);
@@ -11,6 +11,7 @@ export default function Home() {
   const [carsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterBrand, setFilterBrand] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     buttonHandler();
@@ -18,11 +19,11 @@ export default function Home() {
 
   function buttonHandler() {
     fetch("http://localhost:8080/cars")
-      .then(response => response.json())
-      .then(data => {
-        setCars(data);
-        setFilteredCars(data);
-      });
+        .then(response => response.json())
+        .then(data => {
+          setCars(data);
+          setFilteredCars(data);
+        });
   }
 
   function selectHandler(event) {
@@ -69,9 +70,9 @@ export default function Home() {
 
   function filterCars(search, brand) {
     let filtered = cars.filter(car =>
-      car.brand.toLowerCase().includes(search) ||
-      car.model.toLowerCase().includes(search) ||
-      car.horsePower.toString().includes(search)
+        car.brand.toLowerCase().includes(search) ||
+        car.model.toLowerCase().includes(search) ||
+        car.horsePower.toString().includes(search)
     );
 
     if (brand) {
@@ -91,29 +92,28 @@ export default function Home() {
   const uniqueBrands = [...new Set(cars.map(car => car.brand))];
 
   return (
-    <div className="App">
-      <h1>Cool Cars List</h1>
-      <h2>try the filters!</h2>
-      <button onClick={buttonHandler}>load cars</button>
-      <br/>
-      <input
-        type="text"
-        placeholder="Search..."
-        onChange={handleSearch}
-      />
-      <select onChange={handleFilterBrand}>
-        <option value="">All Brands</option>
-        {uniqueBrands.map(brand => (
-          <option key={brand} value={brand}>{brand}</option>
-        ))}
-      </select>
-      <table>
-        <thead>
+      <div className="App">
+        <h1>Cool Cars List</h1>
+        <button onClick={buttonHandler}>load cars</button>
+        <br/>
+        <input
+            type="text"
+            placeholder="Search..."
+            onChange={handleSearch}
+        />
+        <select onChange={handleFilterBrand}>
+          <option value="">All Brands</option>
+          {uniqueBrands.map(brand => (
+              <option key={brand} value={brand}>{brand}</option>
+          ))}
+        </select>
+        <table>
+          <thead>
           <tr>
             <th>
               Brand
               <select onChange={(event) => selectHandler(event)}>
-                <option value="empty"></option>
+                <option value="empty">Standard</option>
                 <option value="brandAsc">Aufsteigend</option>
                 <option value="brandDesc">Absteigend</option>
               </select>
@@ -121,7 +121,7 @@ export default function Home() {
             <th>
               Model
               <select onChange={(event) => selectHandler(event)}>
-                <option value="empty"></option>
+                <option value="empty">Standard</option>
                 <option value="modelAsc">Aufsteigend</option>
                 <option value="modelDesc">Absteigend</option>
               </select>
@@ -129,31 +129,37 @@ export default function Home() {
             <th>
               Horsepower
               <select onChange={(event) => selectHandler(event)}>
-                <option value="empty"></option>
+                <option value="empty">Standard</option>
                 <option value="powerAsc">Aufsteigend</option>
                 <option value="powerDesc">Absteigend</option>
               </select>
             </th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           {currentCars.map((car, index) =>
-            <tr key={index}>
-              <td>{car.brand}</td>
-              <td>{car.model}</td>
-              <td>{car.horsePower}</td>
-            </tr>
+              <tr key={index}>
+                <td>{car.brand}</td>
+                <td>{car.model}</td>
+                <td>{car.horsePower}</td>
+              </tr>
           )}
-        </tbody>
-      </table>
-      <div>
-        {Array.from({ length: Math.ceil(filteredCars.length / carsPerPage) }, (_, i) => (
-          <button key={i} onClick={() => paginate(i + 1)}>
-            {i + 1}
-          </button>
-        ))}
+          </tbody>
+        </table>
+        <div>
+          {Array.from({ length: Math.ceil(filteredCars.length / carsPerPage) }, (_, i) => (
+              <button key={i} onClick={() => paginate(i + 1)}>
+                {i + 1}
+              </button>
+          ))}
+        </div>
+        <button onClick={() => setShowForm(true)}>Add a New Car</button>
+
+        {showForm && (
+            <div className="overlay">
+              <CarForm onClose={() => setShowForm(false)} />
+            </div>
+        )}
       </div>
-      <Link href="/carform">add a new car</Link>
-    </div>
-  )
+  );
 }
