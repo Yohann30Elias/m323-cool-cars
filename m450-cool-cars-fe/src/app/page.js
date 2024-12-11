@@ -7,11 +7,15 @@ import './page.css';
 export default function Home() {
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
+  const [publicCars, setPublicCars] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [carsPerPage] = useState(10);
+  const [carsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterBrand, setFilterBrand] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const brandSelectElement = document.getElementById('brandSelect');
+  const modelSelectElement = document.getElementById('modelSelect');
+  const horsepowerSelectElement = document.getElementById('horsepowerSelect');
 
   useEffect(() => {
     buttonHandler();
@@ -23,6 +27,7 @@ export default function Home() {
         .then(data => {
           setCars(data);
           setFilteredCars(data);
+          setPublicCars(data);
         });
   }
 
@@ -33,27 +38,39 @@ export default function Home() {
     switch (selection) {
       case "brandAsc":
         sortedCars.sort((c1, c2) => c1.brand.localeCompare(c2.brand));
+        modelSelectElement.setValue("empty");
+        horsepowerSelectElement.setValue("empty");
         break;
       case "brandDesc":
         sortedCars.sort((c1, c2) => c2.brand.localeCompare(c1.brand));
+        modelSelectElement.setValue("empty");
+        horsepowerSelectElement.setValue("empty");
         break;
       case "modelAsc":
         sortedCars.sort((c1, c2) => c1.model.localeCompare(c2.model));
+        brandSelectElement.setValue("empty");
+        horsepowerSelectElement.setValue("empty");
         break;
       case "modelDesc":
         sortedCars.sort((c1, c2) => c2.model.localeCompare(c1.model));
+        brandSelectElement.setValue("empty");
+        horsepowerSelectElement.setValue("empty");
         break;
       case "powerAsc":
         sortedCars.sort((c1, c2) => c1.horsePower - c2.horsePower);
+        modelSelectElement.setValue("empty");
+        brandSelectElement.setValue("empty");
         break;
       case "powerDesc":
         sortedCars.sort((c1, c2) => c2.horsePower - c1.horsePower);
+        modelSelectElement.setValue("empty");
+        brandSelectElement.setValue("empty");
         break;
       default:
         break;
     }
 
-    setFilteredCars(sortedCars);
+    setPublicCars(sortedCars);
   }
 
   function handleSearch(event) {
@@ -81,11 +98,13 @@ export default function Home() {
 
     setFilteredCars(filtered);
     setCurrentPage(1);
+
+    setPublicCars(filtered);
   }
 
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
-  const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
+  const currentCars = publicCars.slice(indexOfFirstCar, indexOfLastCar);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -94,7 +113,6 @@ export default function Home() {
   return (
       <div className="App">
         <h1>Cool Cars List</h1>
-        <button onClick={buttonHandler}>load cars</button>
         <br/>
         <input
             type="text"
@@ -112,7 +130,7 @@ export default function Home() {
           <tr>
             <th>
               Brand
-              <select onChange={(event) => selectHandler(event)}>
+              <select id='brandSelect' onChange={(event) => selectHandler(event)}>
                 <option value="empty">Standard</option>
                 <option value="brandAsc">Aufsteigend</option>
                 <option value="brandDesc">Absteigend</option>
@@ -120,7 +138,7 @@ export default function Home() {
             </th>
             <th>
               Model
-              <select onChange={(event) => selectHandler(event)}>
+              <select id='modelSelect' onChange={(event) => selectHandler(event)}>
                 <option value="empty">Standard</option>
                 <option value="modelAsc">Aufsteigend</option>
                 <option value="modelDesc">Absteigend</option>
@@ -128,7 +146,7 @@ export default function Home() {
             </th>
             <th>
               Horsepower
-              <select onChange={(event) => selectHandler(event)}>
+              <select id='horsepowerSelect' onChange={(event) => selectHandler(event)}>
                 <option value="empty">Standard</option>
                 <option value="powerAsc">Aufsteigend</option>
                 <option value="powerDesc">Absteigend</option>
@@ -147,17 +165,17 @@ export default function Home() {
           </tbody>
         </table>
         <div>
-          {Array.from({ length: Math.ceil(filteredCars.length / carsPerPage) }, (_, i) => (
+          {Array.from({length: Math.ceil(publicCars.length / carsPerPage)}, (_, i) => (
               <button key={i} onClick={() => paginate(i + 1)}>
                 {i + 1}
               </button>
           ))}
         </div>
         <button onClick={() => setShowForm(true)}>Add a New Car</button>
-
+        <button onClick={buttonHandler}>load new cars</button>
         {showForm && (
             <div className="overlay">
-              <CarForm onClose={() => setShowForm(false)} />
+              <CarForm onClose={() => setShowForm(false)}/>
             </div>
         )}
       </div>
