@@ -10,4 +10,43 @@ Die Dokumentation befindet sich [hier](https://github.com/Yohann30Elias/m323-coo
 
 ## Projekt Privat aufsetzen
 
-incoming
+### 1. Repository klonen und öfnnen
+```bash
+git clone https://github.com/Yohann30Elias/m323-cool-cars.git
+```
+
+```bash
+cd m323-cool-cars
+```
+
+### 2. Frontend starten
+Im Ordner `m323-cool-cars`:
+```bash
+cd m450-cool-cars-fe
+```
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+### 3. Backend starten
+Im Ordner `m323-cool-cars`:
+```bash
+cd m450-cool-cars-be
+```
+
+```bash
+mvn clean install
+```
+
+```bash
+mvn spring-boot:run
+```
+
+### 4. Projekt aufrufen
+- **Frontend**: [http://localhost:3000](http://localhost:3000)  
+- **Backend**: [http://localhost:8080](http://localhost:8080)
