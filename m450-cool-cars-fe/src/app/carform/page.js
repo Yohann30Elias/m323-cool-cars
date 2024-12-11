@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react"; // Import useState from React
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CarForm({ onClose }) {
   const [brand, setBrand] = useState("");
