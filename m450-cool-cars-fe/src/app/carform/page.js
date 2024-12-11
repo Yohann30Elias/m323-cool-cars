@@ -22,7 +22,7 @@ export default function CarForm({ onClose }) {
 
       if (response.ok) {
         alert("Car added successfully!");
-        router.push("/"); // Redirect to the home page
+        router.push("/");
       } else {
         alert("Failed to add car. Please try again.");
       }
