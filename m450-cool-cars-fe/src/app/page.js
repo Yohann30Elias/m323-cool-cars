@@ -13,9 +13,9 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterBrand, setFilterBrand] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const brandSelectElement = document.getElementById('brandSelect');
-  const modelSelectElement = document.getElementById('modelSelect');
-  const horsepowerSelectElement = document.getElementById('horsepowerSelect');
+  const [brandValue, setBrandValue] = useState("empty");
+  const [modelValue, setModelValue] = useState("empty");
+  const [horsepowerValue, setHorsepowerValue] = useState("empty");
 
   useEffect(() => {
     buttonHandler();
@@ -38,33 +38,33 @@ export default function Home() {
     switch (selection) {
       case "brandAsc":
         sortedCars.sort((c1, c2) => c1.brand.localeCompare(c2.brand));
-        modelSelectElement.setValue("empty");
-        horsepowerSelectElement.setValue("empty");
+        setModelValue("empty");
+        setHorsepowerValue("empty");
         break;
       case "brandDesc":
         sortedCars.sort((c1, c2) => c2.brand.localeCompare(c1.brand));
-        modelSelectElement.setValue("empty");
-        horsepowerSelectElement.setValue("empty");
+        setModelValue("empty");
+        setHorsepowerValue("empty");
         break;
       case "modelAsc":
         sortedCars.sort((c1, c2) => c1.model.localeCompare(c2.model));
-        brandSelectElement.setValue("empty");
-        horsepowerSelectElement.setValue("empty");
+        setBrandValue("empty");
+        setHorsepowerValue("empty");
         break;
       case "modelDesc":
         sortedCars.sort((c1, c2) => c2.model.localeCompare(c1.model));
-        brandSelectElement.setValue("empty");
-        horsepowerSelectElement.setValue("empty");
+        setBrandValue("empty");
+        setHorsepowerValue("empty");
         break;
       case "powerAsc":
         sortedCars.sort((c1, c2) => c1.horsePower - c2.horsePower);
-        modelSelectElement.setValue("empty");
-        brandSelectElement.setValue("empty");
+        setModelValue("empty");
+        setBrandValue("empty");
         break;
       case "powerDesc":
         sortedCars.sort((c1, c2) => c2.horsePower - c1.horsePower);
-        modelSelectElement.setValue("empty");
-        brandSelectElement.setValue("empty");
+        setModelValue("empty");
+        setBrandValue("empty");
         break;
       default:
         break;
@@ -130,7 +130,7 @@ export default function Home() {
           <tr>
             <th>
               Brand
-              <select id='brandSelect' onChange={(event) => selectHandler(event)}>
+              <select value={brandValue} onChange={(event) => {selectHandler(event); setBrandValue(event.target.value)}}>
                 <option value="empty">Standard</option>
                 <option value="brandAsc">Aufsteigend</option>
                 <option value="brandDesc">Absteigend</option>
@@ -138,7 +138,7 @@ export default function Home() {
             </th>
             <th>
               Model
-              <select id='modelSelect' onChange={(event) => selectHandler(event)}>
+              <select value={modelValue} onChange={(event) => {selectHandler(event); setModelValue(event.target.value)}}>
                 <option value="empty">Standard</option>
                 <option value="modelAsc">Aufsteigend</option>
                 <option value="modelDesc">Absteigend</option>
@@ -146,7 +146,7 @@ export default function Home() {
             </th>
             <th>
               Horsepower
-              <select id='horsepowerSelect' onChange={(event) => selectHandler(event)}>
+              <select value={horsepowerValue} onChange={(event) => {selectHandler(event); setHorsepowerValue(event.target.value)}}>
                 <option value="empty">Standard</option>
                 <option value="powerAsc">Aufsteigend</option>
                 <option value="powerDesc">Absteigend</option>
